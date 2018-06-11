@@ -23,7 +23,7 @@
             <br>
 
             <!-- Button triggers new movie to be added -->
-            <input id="add-puppy" type="submit" value="Get. More. Puppies.">
+            <!-- <input id="add-puppy" type="submit" value="Get. More. Puppies.">
 
             <input id="add-puppy" type="submit" value="Goldens">
 
@@ -31,21 +31,21 @@
 
             <input id="add-puppy" type="submit" value="Cavaliers">
 
-            <input id="add-puppy" type="submit" value="Cocker Spaniels">
+            <input id="add-puppy" type="submit" value="Cocker Spaniels"> -->
 
         </form>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
             // Initial array of puppies
-            var topics = ["Goldens", "Labs", "Cavaliers", "Cocker Spaniel"];
+            var topics = ["Golden Retrievers", "Labrador Retriever", "Cavalier King Charles Spaniel", "Cocker Spaniel"];
 
             // Function for dumping the JSON content for each button into the div
             function displayPuppyInfo() {
 
                 var puppy = $(this).attr("data-name");
-                var queryURL = "http://api.giphy.com/v1/gifs/?q=puppies&api_key=" + puppies + "&lBDAR25RJRxKA2j4wBWR5zIJ24m4kRRh&limit=10";
-
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=puppies&api_key=" + puppies + "lBDAR25RJRxKA2j4wBWR5zIJ24m4kRRh&limit=10";
+                // http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=YOUR_API_KEY
                 $.ajax({
                     url: queryURL,
                     method: "GET"
