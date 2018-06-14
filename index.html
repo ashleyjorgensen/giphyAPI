@@ -12,39 +12,61 @@
         <h1>PUPPY! GIFS!</h1>
 
         <!-- Puppies will be put here -->
-        <div id="puppies-view"></div>
-
-        <!-- Buttons will get put here  -->
         <div id="buttons-view"></div>
-
-     
+        <br>
         <form id="puppy-form">
             <label for="puppy-input">Want more puppies?</label>
             <input type="text" id="puppy-input">
-            <style position: fixed></style>
             <br>
-   
+            <input id="submitButton" type="submit" value="submit" class="btn btn-default">
+            <br>
+            <br>
 
-            <!-- Button triggers new movie to be added -->
-            <!-- <input id="add-puppy" type="submit" value="Get. More. Puppies.">
-
-            <input id="add-puppy" type="submit" value="Goldens">
-
-            <input id="add-puppy" type="submit" value="Labs">
-
-            <input id="add-puppy" type="submit" value="Cavaliers">
-
-            <input id="add-puppy" type="submit" value="Cocker Spaniels"> -->
+            <!-- Buttons will get put here  -->
+            <div id="puppies-view"></div>
 
         </form>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
             // Initial array of puppies
-            var topics = ["Golden Retrievers", "Labrador Retriever", "Cavalier King Charles Spaniel", "Cocker Spaniel"];
+            var topics = ["Golden Retrievers", "Labrador Retriever", "Cavalier King Charles Spaniel", "Frenchie"];
 
             // Function for dumping the JSON content for each button into the div
+            function submitPuppyInfo() {
+                console.log("test");
+
+                var puppy = $("#puppy-input").val();
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + puppy + "&api_key=lBDAR25RJRxKA2j4wBWR5zIJ24m4kRRh&limit=10";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    // $("#puppies-view").text(response);
+                    console.log(response);
+                    var responseData = response.data
+                    for (var i = 0; i < response.data.length; i++) {
+                        var puppyDiv = $('<div class ="puppyItem">');
+                        var rating = response.data[i].rating;
+                        var p = $('<p>').text("rating: " + rating);
+                        var still = responseData[i].images.fixed_height_still.url;
+                        var animated = responseData[i].images.fixed_height.url;
+                        var puppyImage = $('<img class="puppyImage">');
+                        puppyImage.attr("src", still);
+                        puppyImage.attr("data-still", still);
+                        console.log(still);
+                        puppyImage.attr("data-animated", animated);
+                        puppyImage.attr("data-state", "still");
+                        puppyDiv.prepend(p);
+                        puppyDiv.prepend(puppyImage);
+                        $('#puppies-view').prepend(puppyDiv);
+                    }
+                });
+            }
+
             function displayPuppyInfo() {
+                console.log("test");
 
                 var puppy = $(this).attr("data-name");
                 var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + puppy + "&api_key=lBDAR25RJRxKA2j4wBWR5zIJ24m4kRRh&limit=10";
@@ -55,42 +77,41 @@
                 }).then(function (response) {
                     // $("#puppies-view").text(response);
                     console.log(response);
-                    var responseData = response.data 
-                    for (var i =0; i < response.data.length; i++) {
-                     var puppyDiv =  $('<div class ="puppyItem">');
-                     var rating = response.data[i].rating;
-                     var p = $('<p>').text("rating: " + rating);
-                     var still = responseData[i].images.fixed_height_still.url;
-                     var animated = responseData[i].images.fixed_height.url;
-                     var puppyImage = $('<img class="puppyImage">');
-                     puppyImage.attr("src", still);
-                     puppyImage.attr("data-still", still);
-                     console.log(still);
-                     puppyImage.attr("data-animated", animated);
-                     puppyImage.attr("data-state", "still");
-                    puppyDiv.append(p);
-                    puppyDiv.append(puppyImage);
-                    $('#puppies-view').append(puppyDiv);
+                    var responseData = response.data
+                    for (var i = 0; i < response.data.length; i++) {
+                        var puppyDiv = $('<div class ="puppyItem">');
+                        var rating = response.data[i].rating;
+                        var p = $('<p>').text("rating: " + rating);
+                        var still = responseData[i].images.fixed_height_still.url;
+                        var animated = responseData[i].images.fixed_height.url;
+                        var puppyImage = $('<img class="puppyImage">');
+                        puppyImage.attr("src", still);
+                        puppyImage.attr("data-still", still);
+                        console.log(still);
+                        puppyImage.attr("data-animated", animated);
+                        puppyImage.attr("data-state", "still");
+                        puppyDiv.prepend(p);
+                        puppyDiv.prepend(puppyImage);
+                        $('#puppies-view').prepend(puppyDiv);
                     }
                 });
             }
 
-        
 
-            // Function for displaying movie data
+
+            // Function for displaying puppy data
             function renderButtons() {
 
                 // Deleting the buttons prior to adding new movies
                 // (this is necessary otherwise you will have repeat buttons)
                 $("#buttons-view").empty();
 
-                // Looping through the array of movies
+                // Looping through the array of puppies
                 for (var i = 0; i < topics.length; i++) {
 
-                    // Then dynamically generating buttons for each movie in the array
-                    // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+                    // enerating buttons for each puppy in the array
                     var a = $("<button>");
-                    // Adding a class of movie to our button
+                    // Adding a class of puppy to our button
                     a.addClass("puppy");
                     // Adding a data-attribute
                     a.attr("data-name", topics[i]);
@@ -105,30 +126,34 @@
             $("#add-puppy").on("click", function (event) {
                 event.preventDefault();
 
-                // This line grabs the input from the textbox
-                var movie = $("#puppy-input").val().trim();
 
-                // Adding the movie from the textbox to our array
-                movies.push(puppy);
+                // This line grabs the input from the textbox
+                var puppy = $("#puppy-input").val().trim();
+
+                // Adding the puppy from the textbox to our array
+                puppies.push(puppy);
                 console.log(topics);
 
-                // Calling renderButtons which handles the processing of our movie array
+                // Calling renderButtons which handles the processing of our puppy array
                 renderButtons();
             });
 
-            // Function for displaying the movie info
-            // Using $(document).on instead of $(".movie").on to add event listeners to dynamically generated elements
+            // Function for displaying the puppy info
             $(document).on("click", ".puppy", displayPuppyInfo);
-            $(document).on("click", ".puppyImage", function() {
+            $(document).on("click", "#submitButton", function () {
+                event.preventDefault();
+                submitPuppyInfo();
+            });
+            $(document).on("click", ".puppyImage", function () {
                 var state = $(this).attr("data-state");
                 if (state == "still") {
                     $(this).attr("src", $(this).attr("data-animated"))
                     $(this).attr("data-state", "animated");
-                }  else {
+                } else {
                     $(this).attr("src", $(this).attr("data-still"))
                     $(this).attr("data-state", "still");
                 }
-               
+
             });
 
 
